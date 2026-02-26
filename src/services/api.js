@@ -79,6 +79,14 @@ export const api = {
 
     getStats: () => fetch(`${API_URL}/bookings/stats/dashboard`, {
       headers: getHeaders()
+    }).then(res => res.json()),
+
+    getTicket: (id) => fetch(`${API_URL}/bookings/${id}/ticket`).then(res => res.json()),
+
+    sendTicket: (id, method) => fetch(`${API_URL}/bookings/${id}/send-ticket`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ method })
     }).then(res => res.json())
   },
 

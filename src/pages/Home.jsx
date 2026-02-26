@@ -214,9 +214,32 @@ const BookingForm = () => {
           <p><strong>Total:</strong> ₹{booking.pricing.finalAmount}</p>
         </div>
 
-        <Link to={`/booking/${booking.bookingId}`} className="btn-primary block w-full">
-          View Booking Details
-        </Link>
+        <div className="grid grid-cols-2 gap-2 mt-2">
+          <Link to={`/booking/${booking.bookingId}`} className="btn-secondary text-center">
+            View & Download
+          </Link>
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const result = await api.bookings.sendTicket(booking.bookingId, 'both')
+                if (result.whatsappUrl) {
+                  window.open(result.whatsappUrl, '_blank')
+                }
+                setTimeout(() => {
+                  if (result.smsUrl) {
+                    window.location.href = result.smsUrl
+                  }
+                }, 1000)
+              } catch (err) {
+                console.error('Failed to send ticket')
+              }
+            }}
+            className="btn-secondary"
+          >
+            Send Ticket
+          </button>
+        </div>
       </div>
     )
   }
@@ -358,7 +381,7 @@ const Home = () => {
         <div className="max-w-4xl mx-auto flex justify-between items-center relative z-10">
           <Link to="/" className="flex items-center gap-2">
             <img src={logo} alt="Logo" className="h-10 sm:h-12 w-10 sm:w-12 object-contain rounded-lg bg-white/10 p-1" />
-            <h1 className="text-lg sm:text-2xl font-bold">Chapak Water Park</h1>
+            <h1 className="text-lg sm:text-2xl font-bold">Chhapak Water Park</h1>
           </Link>
           <Link to="/admin" className="text-xs sm:text-sm hover:text-sky-200">Admin Login</Link>
         </div>

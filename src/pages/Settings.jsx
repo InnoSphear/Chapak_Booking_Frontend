@@ -43,7 +43,12 @@ const Settings = () => {
   const handleNestedSave = async (parent, key, value) => {
     setSaving(true)
     try {
-      const updated = { ...settings[parent], [key]: value }
+      let updated
+      if (key === 'saveAll') {
+        updated = value
+      } else {
+        updated = { ...settings[parent], [key]: value }
+      }
       await api.settings.update({ key: parent, value: updated })
       setSettings({ ...settings, [parent]: updated })
       alert('Saved!')
@@ -143,7 +148,7 @@ const Settings = () => {
                     placeholder="sk_test_..."
                   />
                 </div>
-                <button onClick={() => handleNestedSave('stripe', 'enabled', settings.stripe.enabled)} disabled={saving} className="btn-primary">
+                <button onClick={() => handleNestedSave('stripe', 'saveAll', settings.stripe)} disabled={saving} className="btn-primary">
                   Save Stripe Settings
                 </button>
               </div>
@@ -183,7 +188,7 @@ const Settings = () => {
                     className="input"
                   />
                 </div>
-                <button onClick={() => handleNestedSave('instamojo', 'enabled', settings.instamojo.enabled)} disabled={saving} className="btn-primary">
+                <button onClick={() => handleNestedSave('instamojo', 'saveAll', settings.instamojo)} disabled={saving} className="btn-primary">
                   Save Instamojo Settings
                 </button>
               </div>
