@@ -27,16 +27,30 @@ const defaultBanners = [
 const BannerSlider = () => {
   const [banners, setBanners] = useState(defaultBanners)
   const [current, setCurrent] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    console.log('Fetching banners...')
     api.banners.getActive()
       .then(data => {
-        if (data && data.length > 0) {
+        console.log('Banners received:', data)
+        if (data && Array.isArray(data) && data.length > 0) {
+          setBanners(data)
+        } else {
+          console.log('No active banners, fetching all banners...')
+          return api.banners.getAll()
+        }
+      })
+      .then(data => {
+        if (data && Array.isArray(data) && data.length > 0) {
           setBanners(data)
         }
       })
-      .catch(() => {
-        // Use default banners on error
+      .catch(err => {
+        console.error('Error fetching banners:', err)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }, [])
 

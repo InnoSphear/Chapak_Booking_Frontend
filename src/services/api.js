@@ -131,11 +131,17 @@ export const api = {
   banners: {
     getAll: () => fetch(`${API_URL}/banners`).then(res => res.json()),
     getActive: () => fetch(`${API_URL}/banners/active`).then(res => res.json()),
-    create: (data) => fetch(`${API_URL}/banners`, {
-      method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify(data)
-    }).then(res => res.json()),
+    create: (data) => {
+      console.log('Creating banner with data:', data)
+      return fetch(`${API_URL}/banners`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(data)
+      }).then(res => {
+        console.log('Response status:', res.status)
+        return res.json()
+      })
+    },
     update: (id, data) => fetch(`${API_URL}/banners/${id}`, {
       method: 'PUT',
       headers: getHeaders(),

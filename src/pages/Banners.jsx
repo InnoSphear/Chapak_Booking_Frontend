@@ -40,11 +40,18 @@ const Banners = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    if (!form.imageUrl) {
+      alert('Please upload an image first')
+      return
+    }
+    
     try {
       if (editing) {
         await api.banners.update(editing, form)
       } else {
-        await api.banners.create(form)
+        const result = await api.banners.create(form)
+        console.log('Banner created:', result)
       }
       setEditing(null)
       setForm({
@@ -54,7 +61,8 @@ const Banners = () => {
       if (fileInputRef.current) fileInputRef.current.value = ''
       fetchBanners()
     } catch (err) {
-      alert('Failed to save banner')
+      console.error('Failed to save banner:', err)
+      alert('Failed to save banner: ' + (err.message || 'Unknown error'))
     }
   }
 
