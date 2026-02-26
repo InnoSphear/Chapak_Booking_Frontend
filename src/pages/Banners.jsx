@@ -74,10 +74,6 @@ const Banners = () => {
       fetchBanners()
     } catch (err) {
       console.error('Submit error:', err)
-      alert('Failed to save banner')
-    }
-  }
-      console.error('Failed to save banner:', err)
       alert('Failed to save banner: ' + (err.message || 'Unknown error'))
     }
   }
