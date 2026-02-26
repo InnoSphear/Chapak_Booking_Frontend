@@ -43,7 +43,7 @@ const BannerSlider = () => {
           className={`absolute inset-0 transition-opacity duration-500 ${index === current ? 'opacity-100' : 'opacity-0'}`}
         >
           <img src={banner.imageUrl} alt={banner.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-6 left-6 text-white">
             <h2 className="text-2xl md:text-3xl font-bold">{banner.title}</h2>
             {banner.description && <p className="text-sm mt-1 opacity-90">{banner.description}</p>}

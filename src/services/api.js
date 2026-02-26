@@ -189,12 +189,15 @@ export const api = {
       const formData = new FormData()
       formData.append('image', file)
       const token = localStorage.getItem('token')
+      console.log('Uploading file to cloudinary:', file.name)
       const res = await fetch(`${API_URL}/cloudinary/upload`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData
       })
-      return res.json()
+      const result = await res.json()
+      console.log('Cloudinary upload result:', result)
+      return result
     },
     delete: (publicId) => fetch(`${API_URL}/cloudinary/delete/${publicId}`, {
       method: 'DELETE',

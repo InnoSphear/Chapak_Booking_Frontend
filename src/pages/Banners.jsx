@@ -28,11 +28,17 @@ const Banners = () => {
 
     setUploading(true)
     try {
+      console.log('Uploading file:', file.name)
       const result = await api.cloudinary.upload(file)
+      console.log('Upload result:', result)
       if (result.url) {
         setForm({ ...form, imageUrl: result.url, imagePublicId: result.publicId })
+        console.log('Form updated with imageUrl:', result.url)
+      } else {
+        alert('Failed to get image URL from upload')
       }
     } catch (err) {
+      console.error('Upload error:', err)
       alert('Failed to upload image')
     }
     setUploading(false)
@@ -46,12 +52,18 @@ const Banners = () => {
       return
     }
     
+    console.log('Submitting banner with imageUrl:', form.imageUrl)
+    
     try {
       if (editing) {
         await api.banners.update(editing, form)
       } else {
+        console.log('Creating banner with form:', JSON.stringify(form))
         const result = await api.banners.create(form)
-        console.log('Banner created:', result)
+        console.log('Banner create result:', result)
+        if (result.message && result.error) {
+          alert('Error: ' + result.error)
+        }
       }
       setEditing(null)
       setForm({
@@ -61,6 +73,10 @@ const Banners = () => {
       if (fileInputRef.current) fileInputRef.current.value = ''
       fetchBanners()
     } catch (err) {
+      console.error('Submit error:', err)
+      alert('Failed to save banner')
+    }
+  }
       console.error('Failed to save banner:', err)
       alert('Failed to save banner: ' + (err.message || 'Unknown error'))
     }
