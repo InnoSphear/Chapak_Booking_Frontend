@@ -3,44 +3,13 @@ import { Link } from 'react-router-dom'
 import { api } from '../services/api'
 import logo from '../assets/logo.png'
 
-const defaultBanners = [
-  {
-    _id: '1',
-    title: 'Welcome to Chapak Water Park',
-    description: 'Enjoy a splashing good time with your family!',
-    imageUrl: 'https://images.unsplash.com/photo-1575424909138-46b05e5919ec?w=1200'
-  },
-  {
-    _id: '2',
-    title: 'Special Weekend Offer',
-    description: 'Get amazing discounts on all tickets!',
-    imageUrl: 'https://images.unsplash.com/photo-1541252260730-0412e8e2108e?w=1200'
-  },
-  {
-    _id: '3',
-    title: 'Kids Day Out',
-    description: 'Fun rides for the whole family!',
-    imageUrl: 'https://images.unsplash.com/photo-1571896349842-68c894913dbb?w=1200'
-  }
-]
-
 const BannerSlider = () => {
-  const [banners, setBanners] = useState(defaultBanners)
+  const [banners, setBanners] = useState([])
   const [current, setCurrent] = useState(0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    console.log('Fetching banners...')
     api.banners.getActive()
-      .then(data => {
-        console.log('Banners received:', data)
-        if (data && Array.isArray(data) && data.length > 0) {
-          setBanners(data)
-        } else {
-          console.log('No active banners, fetching all banners...')
-          return api.banners.getAll()
-        }
-      })
       .then(data => {
         if (data && Array.isArray(data) && data.length > 0) {
           setBanners(data)
@@ -61,6 +30,10 @@ const BannerSlider = () => {
     }, 5000)
     return () => clearInterval(timer)
   }, [banners.length])
+
+  if (loading || banners.length === 0) {
+    return null
+  }
 
   return (
     <div className="relative h-64 md:h-80 overflow-hidden rounded-2xl">
